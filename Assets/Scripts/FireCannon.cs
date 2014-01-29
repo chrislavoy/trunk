@@ -2,26 +2,24 @@ using UnityEngine;
 using System.Collections;
 
 public class FireCannon : MonoBehaviour {
-	public GameObject cannonBall;
+	public Rigidbody cannonBall;
 	public float speed = 10;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 	// Update is called once per frame
-	void Update () {
-		transform.Rotate(
-			Input.GetAxis("Vertical"),
-			Input.GetAxis("Horizontal"),0);
-		if(Input.GetButtonDown("Fire1")){
-			GameObject obj = Instantiate(
-				cannonBall,
-				transform.position,
-				cannonBall.transform.rotation) as GameObject;
-			obj.rigidbody.velocity = 
-				transform.forward*speed;
+	void Update() {
+		transform.position += 
+			transform.forward * Input.GetAxis("Forward");
+		transform.position += 
+			transform.right * Input.GetAxis("Sideways");
+		transform.Rotate(-Input.GetAxis("Vertical"),
+				Input.GetAxis("Horizontal"), 0);
+		if(Input.GetButtonDown("Fire1")) {
+			GameObject obj = Instantiate(cannonBall.gameObject, // object to “clone”
+				transform.position, // starting position
+				cannonBall.transform.rotation)// starting orientation
+				as GameObject; // consider this instance as a GameObject
+			// Give a starting velocity. transform.forward gives the direction where
+			// this object (camera) is facing
+			obj.rigidbody.velocity = transform.forward * speed;
 		}
 	}
 }
