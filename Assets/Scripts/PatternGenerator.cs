@@ -14,11 +14,12 @@ public class PatternGenerator : MonoBehaviour {
 	void Update () {
 		if(Input.GetButtonDown("Fire1")) {
 			DestroyPattern();
-			switch (Random.Range(0,2)) {
+			switch (Random.Range(0,5)) {
 			case 0: MakeGrid(); break;
-			case 1: MakeChecker(); break;
-			//case 2: MakeGrid(); break;
-			//case 3: MakeGrid(); break;
+			case 1: MakeTriangle1(); break;
+			case 2: MakeTriangle2(); break;
+			case 3: MakeDiamond(); break;
+			case 4: MakeChecker(); break;
 			}
 		}
 	}
@@ -31,10 +32,39 @@ public class PatternGenerator : MonoBehaviour {
 					block.transform.rotation);
 	}
 	
+	void MakeTriangle1() {
+		for(int i = 0; i < 10; i = i+1)
+			for(int j = i; j < 10; j = j + 1)
+				Instantiate(block,
+					transform.position + new Vector3(i*5,0, j*5),
+					block.transform.rotation);
+	}
+	
+	void MakeTriangle2() {
+		for(int i = 0; i < 10; i = i+1)
+			for(int j = i; j < 10-i; j = j + 1)
+				Instantiate(block,
+					transform.position + new Vector3(i*5,0, j*5),
+					block.transform.rotation);
+	}
+	
+	void MakeDiamond() {
+		for(int i = 0; i < 10; i = i+1)
+			for(int j = i; j < 10-i; j = j + 1)
+			{
+				Instantiate(block,
+					transform.position + new Vector3(i*5 + 27.5f,0, j*5),
+					block.transform.rotation);
+				Instantiate(block,
+					transform.position + new Vector3(-i*5 + 22.5f,0, j*5),
+					block.transform.rotation);
+			}
+	}
+	
 	void MakeChecker() {
 		for(int i = 0; i < 10; i = i+1)
 			for(int j = 0; j < 10; j = j + 1)
-				if((i+j) % 2 != 0)
+				if((i*j) % 2 != 0)
 				Instantiate(block,
 					transform.position + new Vector3(i*5,0, j*5),
 					block.transform.rotation);
