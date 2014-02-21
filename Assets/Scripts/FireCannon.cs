@@ -13,13 +13,22 @@ public class FireCannon : MonoBehaviour {
 		transform.Rotate(-Input.GetAxis("Vertical"),
 				Input.GetAxis("Horizontal"), 0);
 		if(Input.GetButtonDown("Fire1")) {
-			GameObject obj = Instantiate(cannonBall.gameObject, // object to “clone”
-				transform.position, // starting position
-				cannonBall.transform.rotation)// starting orientation
-				as GameObject; // consider this instance as a GameObject
-			// Give a starting velocity. transform.forward gives the direction where
-			// this object (camera) is facing
-			obj.rigidbody.velocity = transform.forward * speed;
+			Vector3 direction = camera.ScreenToWorldPoint(
+				Input.mousePosition + Vector3.forward) - transform.position;
+			direction.Normalize();
+			Ray ray = new Ray (transform.position, direction);
+			RaycastHit hitInfo;
+			Physics.Raycast(ray, out hitInfo, camera.farClipPlane);
+			if(hitInfo.collider != null &&
+				hitInfo.collider.tag == "Brick") {
+				GameObject obj = Instantiate(cannonBall.gameObject, // object to “clone”
+					transform.position, // starting position
+					cannonBall.transform.rotation)// starting orientation
+					as GameObject; // consider this instance as a GameObject
+				// Give a starting velocity. transform.forward gives the direction where
+				// this object (camera) is facing
+				obj.rigidbody.velocity = direction * speed;
+			}
 		}
 	}
 }
