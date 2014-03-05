@@ -6,6 +6,9 @@ public class ShootTarget : MonoBehaviour {
 	public float speed;
 	public Camera firstPersonCamera;
 	public GUITexture cursor;
+	
+	public AudioClip rightClip;
+	public AudioClip wrongClip;
 
 	void Update () {
 		if(GameObject.FindGameObjectsWithTag("Target").Length == 0)
@@ -32,10 +35,13 @@ public class ShootTarget : MonoBehaviour {
 						firstPersonCamera.transform.position,
 						bullet.transform.rotation) as GameObject;
 					bulletInstance.rigidbody.velocity = direction * speed;
+					audio.PlayOneShot(rightClip);
 				}
 			}
 			else {
 				cursor.color = Color.red;
+				if(Input.GetButtonDown("Fire1"))
+					audio.PlayOneShot(wrongClip);
 			}
 		}
 	}
