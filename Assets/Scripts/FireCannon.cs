@@ -6,13 +6,7 @@ public class FireCannon : MonoBehaviour {
 	public float speed = 10;
 	// Update is called once per frame
 	void Update() {
-		transform.position += 
-			transform.forward * Input.GetAxis("Forward");
-		transform.position += 
-			transform.right * Input.GetAxis("Sideways");
-		transform.Rotate(-Input.GetAxis("Vertical"),
-				Input.GetAxis("Horizontal"), 0);
-		if(Input.GetButtonDown("Fire1")) {
+		if(Input.GetButtonDown("Fire2")) {
 			Vector3 direction = camera.ScreenToWorldPoint(
 				Input.mousePosition + Vector3.forward) - transform.position;
 			direction.Normalize();
