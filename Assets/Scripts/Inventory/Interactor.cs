@@ -12,7 +12,7 @@ public class Interactor : MonoBehaviour {
 		isDragging = false;
 	}
 	
-	void OnMouseUp()
+	public virtual void OnMouseUp()
 	{
 		if(!isDragging)
 		{
@@ -24,5 +24,11 @@ public class Interactor : MonoBehaviour {
 			GameObject.FindGameObjectWithTag("GameController").
 				GetComponent<InventoryManager>().Interact(this);
 		}
+	}
+	
+	public virtual bool Use()
+	{
+		Destroy (gameObject);
+		return true;
 	}
 }

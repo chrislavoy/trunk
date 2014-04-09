@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour {
-	
+	public GUISkin skin;
 	public int itemSize = 64;
 	private int page = 0;
 	private List<Interactor> items;
@@ -33,7 +33,7 @@ public class InventoryManager : MonoBehaviour {
 	
 	void Update()
 	{
-		if(selectedItem != null)
+		if(selectedItem != null && selectedItem as Item)
 		{
 			selectedItem.worldIcon.transform.position =
 				Camera.main.ScreenPointToRay(Input.mousePosition).GetPoint(1);
@@ -46,6 +46,7 @@ public class InventoryManager : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		GUI.skin = skin;
 		int itemsPerPage = Screen.width / itemSize - 1;
 		GUI.BeginGroup(new Rect(0,Screen.height - itemSize,Screen.width, itemSize));
 		float offset = (Screen.width - itemsPerPage * itemSize)/2;
@@ -63,7 +64,7 @@ public class InventoryManager : MonoBehaviour {
 			}
 			else
 				GUI.Button (new Rect(offset+i*itemSize, 0, itemSize, itemSize),
-					"-");
+					"");
 				
 		}
 		if(GUI.Button (new Rect(Screen.width - offset,0, offset,itemSize), ">"))
@@ -73,6 +74,8 @@ public class InventoryManager : MonoBehaviour {
 	
 	public void Interact(Interactor item)
 	{
+		if(items.Contains(item))
+			return;
 		items.Add (item);
 		if(item.worldIcon == null)
 		{
@@ -85,8 +88,10 @@ public class InventoryManager : MonoBehaviour {
 	
 	public void UseItem(Interactor item)
 	{
-		items.Remove (item);
-		selectedItem = null;
-		Destroy(item.gameObject);
+		if(item.Use ())
+		{
+			items.Remove (item);
+			selectedItem = null;
+		}
 	}
 }
