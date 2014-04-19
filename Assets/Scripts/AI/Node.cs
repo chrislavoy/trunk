@@ -7,6 +7,8 @@ public class Node
 	
 	public Vector3 position {get; set;}
 	public float cost {get;set;}
+	public float heuristic {get;set;}
+	public float total {get;set;}
 	public Node parent {get;set;}
 	public NodeStatus status {get;set;}
 	public List<Node> neighbors {get; protected set;}

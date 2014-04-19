@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 public class WaypointGraph : MonoBehaviour {
 	
@@ -18,25 +19,27 @@ public class WaypointGraph : MonoBehaviour {
 			nodes.Add(node);
 			//Destroy(waypoints[i]);
 		}
+		RaycastHit info;
 		// Find neighbors
 		for(int i = 0; i < nodes.Count; i++)
 			for(int j = i+1; j < nodes.Count; j++)
 		{
 			Vector3 dir = nodes[j].position - nodes[i].position;
 			// if i-j can be connected, then
-			if(!Physics.Raycast(
+			if(Physics.Raycast(
 				new Ray(nodes[i].position,
-				dir.normalized),
-				dir.magnitude))
+				dir.normalized), out info,
+				dir.magnitude) && info.collider.gameObject == nodes[j].waypoint)
 			{
 				nodes[i].neighbors.Add (nodes[j]);
 				nodes[j].neighbors.Add (nodes[i]);
 			}
+			Destroy (nodes[i].waypoint.collider);
 		}
 		
 	}
 	
-	public void SetupSearch(Vector3 enemyPosition, Vector3 playerPosition)
+	public List<Vector3> Search(Vector3 enemyPosition, Vector3 playerPosition)
 	{
 		Node start = null, end = null;
 		float startDistance = float.MaxValue;
@@ -56,13 +59,16 @@ public class WaypointGraph : MonoBehaviour {
 			}
 		}
 		FindPath (start, end);
+		List<Vector3> path = new List<Vector3>();
 		Node current = end;
 		while(current != null)
 		{
+			path.Add (current.position);
+			print (current.position);
 			current.waypoint.renderer.material.color = Color.green;
 			current = current.parent;
-			
 		}
+		return path;
 	}
 	
 	void FindPath(Node start, Node end)
@@ -73,14 +79,17 @@ public class WaypointGraph : MonoBehaviour {
 		}
 		SortedList<float, List<Node>> openList = new SortedList<float, List<Node>>();
 		start.cost = 0;
+		start.heuristic = (end.position - start.position).magnitude;
+		start.total = start.cost + start.heuristic;
 		start.status = Node.NodeStatus.Open;
 		AddNode(openList, start);
 		
 		while(openList.Count > 0)
 		{
 			Node current = openList.ElementAt(0).Value[0];
-			current.status = Node.NodeStatus.Closed;
 			RemoveNode(openList, current);
+			current.status = Node.NodeStatus.Closed;
+			
 			if(current == end)
 				break;
 			foreach(Node node in current.neighbors)
@@ -93,9 +102,11 @@ public class WaypointGraph : MonoBehaviour {
 					if(node.status == Node.NodeStatus.Open)
 						RemoveNode (openList,node);
 					node.cost = tempCost;
+					node.heuristic = (end.position - node.position).magnitude;
+					node.total = node.cost + node.heuristic;
 					node.parent = current;
 					AddNode (openList,node);
-					current.status = Node.NodeStatus.Open;
+					node.status = Node.NodeStatus.Open;
 				}
 			}
 			
@@ -104,22 +115,19 @@ public class WaypointGraph : MonoBehaviour {
 	
 	void AddNode(SortedList<float, List<Node>> openList, Node node)
 	{
-		if(openList.ContainsKey(node.cost))
-			openList[node.cost].Add(node);
+		if(openList.ContainsKey(node.total))
+			openList[node.total].Add(node);
 		else
 		{
-			openList[node.cost] = new List<Node>();
-			openList[node.cost].Add(node);
+			openList[node.total] = new List<Node>();
+			openList[node.total].Add(node);
 		}
 	}
 	
 	void RemoveNode(SortedList<float, List<Node>> openList, Node node)
 	{
-		if(openList.ContainsKey(node.cost))
-		{
-			openList[node.cost].Remove(node);
-			if(openList[node.cost].Count == 0)
-				openList.Remove(node.cost);
-		}
+		openList[node.total].Remove(node);
+		if(openList[node.total].Count == 0)
+			openList.Remove(node.total);
 	}
 }
