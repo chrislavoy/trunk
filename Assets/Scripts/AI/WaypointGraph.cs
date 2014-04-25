@@ -6,11 +6,14 @@ using System;
 public class WaypointGraph : MonoBehaviour {
 	
 	private List<Node> nodes;
+	public Transform waypoints;
 	
 	void Start () {
 		// Create nodes
 		nodes = new List<Node>();
-		GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+		GameObject[] waypoints = new GameObject[this.waypoints.childCount];
+		for(int i = 0; i < waypoints.Length; i++)
+			waypoints[i] = this.waypoints.GetChild(i).gameObject;
 		for(int i = 0; i < waypoints.Length; i++)
 		{
 			Node node = new Node();
