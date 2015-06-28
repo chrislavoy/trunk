@@ -9,7 +9,7 @@ public class TargetHit : MonoBehaviour {
 		if(collision.gameObject.tag == "Bullet") {
 			Destroy(collision.gameObject);
 		gameObject.tag = "Brick";
-		audio.PlayOneShot(clip, 10);
+		GetComponent<AudioSource>().PlayOneShot(clip, 10);
 		}
 	}
 }

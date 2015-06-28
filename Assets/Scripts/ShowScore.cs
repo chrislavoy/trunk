@@ -10,7 +10,7 @@ public class ShowScore : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		guiText.text = "Score: " + Controller.score;
+		GetComponent<GUIText>().text = "Score: " + Controller.score;
 	
 	}
 }

@@ -5,7 +5,7 @@ public class CursorControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Screen.showCursor = false; // show hide cursor, but doesn't
+		Cursor.visible = false; // show hide cursor, but doesn't
 	}
 	
 	// Update is called once per frame

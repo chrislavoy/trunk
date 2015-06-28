@@ -37,7 +37,7 @@ public class WaypointGraph : MonoBehaviour {
 				nodes[i].neighbors.Add (nodes[j]);
 				nodes[j].neighbors.Add (nodes[i]);
 			}
-			Destroy (nodes[i].waypoint.collider);
+			Destroy (nodes[i].waypoint.GetComponent<Collider>());
 		}
 		
 	}
@@ -68,7 +68,7 @@ public class WaypointGraph : MonoBehaviour {
 		{
 			path.Add (current.position);
 			print (current.position);
-			current.waypoint.renderer.material.color = Color.green;
+			current.waypoint.GetComponent<Renderer>().material.color = Color.green;
 			current = current.parent;
 		}
 		return path;

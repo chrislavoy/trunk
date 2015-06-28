@@ -14,12 +14,12 @@ public class Drawer : MonoBehaviour {
 	{
 		if(locked)
 		{
-			audio.PlayOneShot(lockedClip);
+			GetComponent<AudioSource>().PlayOneShot(lockedClip);
 		}
 		else if(!targetAnimation.isPlaying)
 		{
 			targetAnimation.Play(clips[index]);
-			audio.PlayOneShot(audioClips[index]);
+			GetComponent<AudioSource>().PlayOneShot(audioClips[index]);
 			index = (index + 1) % clips.Length;
 		}
 	}

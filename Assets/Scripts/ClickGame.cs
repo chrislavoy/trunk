@@ -30,7 +30,7 @@ public class ClickGame : MonoBehaviour {
 		cursor.color = Color.white;
 		bool canCollect = false;
 		RaycastHit info;
-		if(nextTarget.collider.Raycast(
+		if(nextTarget.GetComponent<Collider>().Raycast(
 			firstPersonCamera.ScreenPointToRay(Input.mousePosition),
 			out info, firstPersonCamera.farClipPlane)) {
 			cursor.color = Color.red;

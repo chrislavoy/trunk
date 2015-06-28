@@ -5,11 +5,11 @@ public class CursorColorChange : MonoBehaviour {
 	
 	void OnMouseEnter() {
 		GameObject.FindGameObjectWithTag("Cursor").
-			guiTexture.color = Color.green;
+			GetComponent<GUITexture>().color = Color.green;
 	}
 	
 	void OnMouseExit() {
 		GameObject.FindGameObjectWithTag("Cursor").
-			guiTexture.color = Color.white;
+			GetComponent<GUITexture>().color = Color.white;
 	}
 }

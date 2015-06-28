@@ -34,14 +34,14 @@ public class ShootTarget : MonoBehaviour {
 						bullet.gameObject,
 						firstPersonCamera.transform.position,
 						bullet.transform.rotation) as GameObject;
-					bulletInstance.rigidbody.velocity = direction * speed;
-					audio.PlayOneShot(rightClip);
+					bulletInstance.GetComponent<Rigidbody>().velocity = direction * speed;
+					GetComponent<AudioSource>().PlayOneShot(rightClip);
 				}
 			}
 			else {
 				cursor.color = Color.red;
 				if(Input.GetButtonDown("Fire1"))
-					audio.PlayOneShot(wrongClip);
+					GetComponent<AudioSource>().PlayOneShot(wrongClip);
 			}
 		}
 	}
